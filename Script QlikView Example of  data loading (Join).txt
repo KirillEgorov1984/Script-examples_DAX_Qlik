@@ -1,0 +1,181 @@
+NoConcatenate
+
+0:
+LOAD 
+//Distinct
+      Lower(Trim(SP17187))              as eMail,
+      SP17189&SP17188                   as Телефон,
+      DESCR                             as [object description], 
+//      SP17188                           as Телефон_,
+//      SP17189                           as КодТелефона,    
+//      ROW_ID                            as [Row ID], 
+      ID                                as [ID object] , 
+//      CODE                              as [object code],          
+//      ISMARK                            as [Object is Marked for], 
+//      VERSTAMP                          as [Version stamp], 
+      SP17124                           as ШтрихКод, 
+//      SP17128                           as СкидкаРазмер, 
+//      SP17127                           as Активность, 
+      SP17186                           as ДатаВыдачи, 
+//      SP17185                           as Уведомление, 
+//      SP17190                           as ГодРождения, 
+//      SP17215                           as Адрес, 
+//      SP18086                           as Подразделение, 
+      SP18216                           as СтарыйШтрихкод, 
+//      SP18210                           as Служебный, 
+//      SP18779                           as Сертификат, 
+      SP22479                           as ДатаРедактировани, 
+//      SP23128                           as ВидДК,
+      'S+I'                             as Channel 
+
+FROM
+[D:\QVD\RawData_DataLevel0\_77\SC17122.qvd]
+(qvd)
+;
+
+inner join (0)
+
+LOAD 
+     DISTINCT
+     Lower(Trim(EMAIL))                   as eMail 
+FROM
+[D:\QVD\RawData_DataLevel0\Bitrix\BitrixUser.qvd]
+(qvd)
+Where ACTIVE = 'Y'
+;
+
+inner join (0)
+
+LOAD 
+       Distinct
+       ID                                              as [ID object]
+       
+FROM
+[D:\QVD\RawData_DataLevel0\Bitrix\BitrixUser.qvd]
+(qvd)
+Where ACTIVE = 'Y'
+;
+
+
+NoConcatenate
+
+1:
+LOAD 
+//Distinct
+      Lower(Trim(SP17187))              as eMail,
+      SP17189&SP17188                   as Телефон,
+      DESCR                             as [object description], 
+//      SP17188                           as Телефон_,
+//      SP17189                           as КодТелефона,    
+//      ROW_ID                            as [Row ID], 
+      ID                                as [ID object] , 
+//      CODE                              as [object code],          
+//      ISMARK                            as [Object is Marked for], 
+//      VERSTAMP                          as [Version stamp], 
+      SP17124                           as ШтрихКод, 
+//      SP17128                           as СкидкаРазмер, 
+//      SP17127                           as Активность, 
+      SP17186                           as ДатаВыдачи, 
+//      SP17185                           as Уведомление, 
+//      SP17190                           as ГодРождения, 
+//      SP17215                           as Адрес, 
+//      SP18086                           as Подразделение, 
+      SP18216                           as СтарыйШтрихкод, 
+//      SP18210                           as Служебный, 
+//      SP18779                           as Сертификат, 
+      SP22479                           as ДатаРедактировани, 
+//      SP23128                           as ВидДК,
+      'S+I'                             as Channel 
+
+FROM
+[D:\QVD\RawData_DataLevel0\_77\SC17122.qvd]
+(qvd)
+;
+
+inner join (1)
+
+LOAD 
+       Distinct
+       PERSONAL_PHONE                     as Телефон
+       
+FROM
+[D:\QVD\RawData_DataLevel0\Bitrix\BitrixUser.qvd]
+(qvd)
+Where ACTIVE = 'Y'
+;
+
+
+inner join (1)
+
+LOAD 
+       Distinct
+       ID                                              as [ID object]
+       
+FROM
+[D:\QVD\RawData_DataLevel0\Bitrix\BitrixUser.qvd]
+(qvd)
+Where ACTIVE = 'Y'
+;
+
+
+
+
+
+NoConcatenate
+
+SI_0:
+Load
+eMail,
+Телефон,
+[object description],
+[ID object],
+ШтрихКод,
+СтарыйШтрихкод, 
+ДатаВыдачи,
+ДатаРедактировани,
+Channel
+
+Resident 0;
+
+Drop Table 0;
+
+Concatenate
+
+Load
+eMail,
+Телефон,
+[object description],
+[ID object],
+ШтрихКод,
+СтарыйШтрихкод, 
+ДатаВыдачи,
+ДатаРедактировани,
+Channel
+
+Resident 1;
+
+Drop Table 1;
+
+
+NoConcatenate
+
+SI:
+LOAD
+
+Distinct
+
+eMail,
+eMail&''&Телефон&''&[ID object] as eMailТелID,
+Телефон,
+[object description],
+[ID object],
+ШтрихКод,
+СтарыйШтрихкод, 
+ДатаВыдачи,
+ДатаРедактировани,
+Channel,
+1 as Key
+
+Resident SI_0;
+
+Drop Table SI_0;
