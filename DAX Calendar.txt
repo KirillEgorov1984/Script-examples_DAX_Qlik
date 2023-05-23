@@ -1,0 +1,35 @@
+Date = 
+VAR FirstYear =           -- Customize first year to use
+    YEAR ( MIN ( 'ТабФактов'[Дата]  ))
+RETURN
+GENERATE (
+    FILTER (
+        CALENDARAUTO (),
+        YEAR ( [Date] ) >= FirstYear
+    ),
+    VAR Yr = YEAR ( [Date] )                                     -- Year - Number
+    VAR YrMn = YEAR ([Date])&"-"&FORMAT(MONTH([Date]),"mm")      -- Year - Month
+    VAR YrQr = YEAR ([Date])&"-"&FORMAT(QUARTER([Date]),"\QQ")   -- Year - Quarter
+    VAR YrWe = YEAR ([Date])&"-"&WEEKNUM([Date])                 -- Year - WeekNUM
+    VAR YrMnFilter = YEAR ([Date])*100+(MONTH([Date]))           -- YearMonthFilter
+    VAR YrQrFilter = YEAR ([Date])*100+(QUARTER([Date]))         -- YearQuarterFilter
+    VAR YrWeFilter = YEAR ([Date])*100+(WEEKNUM([Date]))         -- YearQuarterWeek
+    VAR Mn = MONTH ( [Date] )                                    -- Month Number (1-12)
+    VAR Qr = QUARTER ( [Date] )                                  -- Quarter Number (1-4)
+    VAR MnQ = Mn - 3 * (Qr - 1)                                  -- Month in Quarter (1-3)
+    VAR WeekNum = WEEKNUM([Date])                                -- WeekNUM
+    VAR Wd = WEEKDAY ( [Date], 1 ) - 1                           -- Week day number (0 = Sunday, 1 = Monday, ...)
+    
+    RETURN ROW (
+        "Year", Yr,
+        "Month",Mn,
+        "Quarter",Qr,
+        "WeekNum",WeekNum,
+        "QuarterName", FORMAT ( [Date], "\QQ"),
+        "YearMonth",YrMn,
+        "YearQuarter",YrQr,
+        "YearWeek",YrWe,
+        "YearMonthFilter",YrMnFilter,
+        "YearQuarterFilter",YrQrFilter,
+        "YearWeekFilter",YrWeFilter
+))
