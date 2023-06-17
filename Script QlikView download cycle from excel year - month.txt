@@ -1,0 +1,51 @@
+SET перТекущаяПапка      = D:\AdditionalDataForQlik\Monthly_Shops\;
+SET перПапка             = D:\AdditionalDataForQlik\Monthly_Shops\ExpMonthly;
+SET перТекущийФайл       = D:\AdditionalDataForQlik\Monthly_Shops\ExpMonthly\ExpMonthly_2021.xls;
+
+
+FOR Each перТекущийФайл in FileList('$(перПапка)\*.xls')
+
+
+ListOfSheets:
+LOAD Дата
+FROM
+[$(перТекущийФайл)]
+(biff, embedded labels, table is Start$);
+
+Let vNumberOfSheets = FieldValueCount('Дата');
+
+FOR i = 1 to vNumberOfSheets
+Let vCurrentSheetName = FieldValue('Дата', i);
+0:
+LOAD Склад, 
+     Оренда, 
+     [Оплата праці], 
+     [Інші витрати], 
+     [Частина ЦО], 
+     [Площа, м2],
+     '$(vCurrentSheetName)' as Период
+FROM
+[$(перТекущийФайл)]
+(biff, embedded labels, table is [$(vCurrentSheetName)$]);
+NEXT i
+Drop Table ListOfSheets;
+NEXT
+
+NoConcatenate
+
+ExpMonthly:
+LOAD
+     Склад, 
+     Оренда, 
+     [Оплата праці], 
+     [Інші витрати], 
+     [Частина ЦО], 
+     [Площа, м2],
+     Date(Replace(Период,'_','.')) as Период
+Resident 0;
+
+Drop Table 0;
+
+
+STORE ExpMonthly into [D:\QVD\DataLevel1\MonthlyExpenses.qvd] (qvd);
+DROP Table ExpMonthly;
