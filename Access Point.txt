@@ -1,0 +1,43 @@
+№1 
+
+AccessRoles:
+LOAD *, UPPER(USERNAME_BASE) as USERNAME_ACCESS INLINE [
+    USERNAME_BASE  , VISIBILITY_SEGMETATION, VISIBILITY_CUSTOMERS, VISIBILITY_MATRIX, VISIBILITY_RFM, VISIBILITY_BEDSHEET, VISIBILITY_SEGMETATION2, VISIBILITY_CUSTOMERS2
+	ODemova        , 0                     , 0                   , 0                , 0             , 0                  , 0                      , 0       
+	ZhabenkoZoya   , 1                     , 0                   , 1                , 1             , 0                  , 1                      , 0 
+	GuzhvynskaL    , 1                     , 0                   , 1                , 1             , 0                  , 1                      , 0 
+	VorobyovV      , 1                     , 1                   , 1                , 1             , 1                  , 1                      , 1 
+	Plahteev_Sergey, 1                     , 1                   , 1                , 1             , 1                  , 1                      , 1 
+	Qlik_user      , 1                     , 1                   , 1                , 1             , 1                  , 1                      , 1 
+	Qlik_user1     , 1                     , 1                   , 1                , 1             , 1                  , 1                      , 1 
+];
+
+
+Section Access;
+LOAD * INLINE [
+    ACCESS, NTNAME         , USERNAME_ACCESS
+	User  , ODemova        , ODemova
+	User  , ZhabenkoZoya   , ZhabenkoZoya
+	User  , GuzhvynskaL    , GuzhvynskaL
+	User  , VorobyovV      , VorobyovV
+	User  , Plahteev_Sergey, Plahteev_Sergey
+	Admin , Qlik_user      , Qlik_user
+	Admin , Qlik_user1     , Qlik_user1
+];
+Section Application;
+
+
+№2 
+Access Point
+
+Section Access;
+LOAD * INLINE [
+    ACCESS, NTNAME         
+	User  , ODemova
+	User  , GuzhvynskaL
+	User  , VorobyovV
+	User  , Plahteev_Sergey
+	Admin , Qlik_user
+	Admin , Qlik_user1
+];
+Section Application;
